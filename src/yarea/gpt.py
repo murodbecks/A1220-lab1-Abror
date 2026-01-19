@@ -1,4 +1,5 @@
 import os
+import re
 import json
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -13,11 +14,39 @@ client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 CATEGORIES = ["Meals", "Transport", "Lodging", "Office Supplies",
               "Entertainment", "Other"]
 
+def check_price(price):
+    """Sanitizes the price string to ensure it is a valid float.
+
+    Removes currency symbols (like '$') and converts the string to a float.
+    If conversion fails or input is None, returns None.
+
+    Args:
+        price (str or float or None): The price value returned by the model.
+
+    Returns:
+        float or None: The cleaned float value, or None if conversion fails.
+    """
+    if price is None:
+        return None
+        
+    # If it's already a number, return it directly
+    if isinstance(price, (int, float)):
+        return float(price)
+        
+    # Remove '$' and whitespace
+    cleaned_price = str(price).replace("$", "").strip()
+    
+    try:
+        return float(cleaned_price)
+    except ValueError:
+        return None
+
 def extract_receipt_info(image_b64):
     """Extracts receipt details from a base64-encoded image using OpenAI API.
 
     Constructs a prompt with predefined categories and sends the image to a
     language model to parse specific fields (date, amount, vendor, category).
+    Applies sanity checks to the amount field.
 
     Args:
         image_b64 (str): The receipt image encoded as a base64 string.
@@ -63,5 +92,11 @@ The output must be valid JSON.
             }
         ]
     )
-    # Parse and return the JSON content from the response
-    return json.loads(response.choices[0].message.content)
+    # Parse the JSON content from the response
+    data = json.loads(response.choices[0].message.content)
+
+    # Sanity check: clean the amount field
+    if "amount" in data:
+        data["amount"] = check_price(data["amount"])
+
+    return data

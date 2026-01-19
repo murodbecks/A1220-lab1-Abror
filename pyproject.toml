@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yarea"
+version = "0.0.1"
+authors = [
+  {name="Abror Shopulatov", email="murodbeck@proton.me"}
+]
+maintainers = [
+    {name="Abror Shopulatov", email="murodbeck@proton.me"},
+]
+license = {file = "LICENSE"}
+keywords = ["openai", "llm", "parser", "reciept"]
+description = "yarea - Yet Another Reciept Extraction App. The project is done as part of Lab1 at AI1220 Software, Mobile & Web Engineering course at MBZUAI."
+readme = "README.md"
+requires-python = ">=3.7, <3.14"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX",
+    "Topic :: Text Processing :: Linguistic"
+]
+dependencies = [
+  "openai==2.15.0",
+  "python-dotenv==1.2.1"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/murodbecks/A1220-lab1-Abror"
+"Bug Tracker" = "https://github.com/murodbecks/A1220-lab1-Abror/issues"
+
+[tool.hatch.metadata]
+allow-direct-references = true

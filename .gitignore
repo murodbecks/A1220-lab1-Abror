@@ -1,5 +1,9 @@
+# Annoying MacOS files
 .DS_Store
 __MACOSX/*
+
+# pdoc documentation
+docs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
